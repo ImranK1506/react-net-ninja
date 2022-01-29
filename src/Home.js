@@ -3,12 +3,19 @@ import { useState } from 'react';
 import BlogList from "./BlogList";
 
 const Home = () => {
-  // #10 Outputting lists
+  // Outputting lists
   const [blogs, setBlogs] = useState([
-    { title: 'My new website', body: 'lorem ipsum...', author: 'Imran', id: 1 },
-    { title: 'Welcome party!', body: 'lorem ipsum...', author: 'Mahreen', id: 2 },
-    { title: 'Web dev top tips', body: 'lorem ipsum...', author: 'Musa', id: 3 }
+    { title: 'My new website 1', body: 'lorem ipsum...', author: 'Imran', id: 1 },
+    { title: 'My new website 2', body: 'lorem ipsum...', author: 'Imran', id: 2 },
+    { title: 'Welcome party!', body: 'lorem ipsum...', author: 'Mahreen', id: 3 },
+    { title: 'Web dev top tips', body: 'lorem ipsum...', author: 'Musa', id: 4 }
   ]);
+
+  const handleDelete = (id) => {
+    const newBlogs = blogs.filter((blog) => blog.id !== id)
+    setBlogs(newBlogs)
+  }
+
   // useState: Reactive state
   // const [name, setName] = useState('Mahreen');
   // const [age, setAge] = useState(36);
@@ -24,7 +31,11 @@ const Home = () => {
 
   return (
       <div className="home">
-        <BlogList hasBlogs={blogs} title="All blogs"/>
+        <BlogList hasBlogs={blogs} title="All blogs"
+                  handleDelete={handleDelete}/>
+        <BlogList hasBlogs={blogs.filter((blog) => blog.author === 'Imran')}
+                  title="Imran's blogs"
+                  handleDelete={handleDelete}/>
         {/*<p>{name} is {age} year(s) of age</p>*/}
         {/*<button onClick={handleClick}>Click</button>*/}
         {/* Event objects */}
