@@ -11,15 +11,18 @@ const Home = () => {
     { title: 'Web dev top tips', body: 'lorem ipsum...', author: 'Musa', id: 4 }
   ]);
 
+  const [name, setName] = useState('Imran');
+
   // Fires on every render
   useEffect(() => {
     console.log('effect');
-  })
+    console.log(name);
+  }, [name]);
 
   const handleDelete = (id) => {
     const newBlogs = blogs.filter((blog) => blog.id !== id)
     setBlogs(newBlogs)
-  }
+  };
 
   // useState: Reactive state
   // const [name, setName] = useState('Mahreen');
@@ -41,6 +44,8 @@ const Home = () => {
         <BlogList hasBlogs={blogs.filter((blog) => blog.author === 'Imran')}
                   title="Imran's blogs"
                   handleDelete={handleDelete}/>
+        <button onClick={() => setName('Musa')}>Change name</button>
+        <p>{ name }</p>
         {/*<p>{name} is {age} year(s) of age</p>*/}
         {/*<button onClick={handleClick}>Click</button>*/}
         {/* Event objects */}
