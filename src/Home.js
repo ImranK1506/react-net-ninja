@@ -4,25 +4,26 @@ import BlogList from "./BlogList";
 
 const Home = () => {
   // Outputting lists
-  const [blogs, setBlogs] = useState([
-    { title: 'My new website 1', body: 'lorem ipsum...', author: 'Imran', id: 1 },
-    { title: 'My new website 2', body: 'lorem ipsum...', author: 'Imran', id: 2 },
-    { title: 'Welcome party!', body: 'lorem ipsum...', author: 'Mahreen', id: 3 },
-    { title: 'Web dev top tips', body: 'lorem ipsum...', author: 'Musa', id: 4 }
-  ]);
+  const [blogs, setBlogs] = useState(null)
 
   const [name, setName] = useState('Imran');
 
   // Fires on every render
   useEffect(() => {
-    console.log('effect');
-    console.log(name);
-  }, [name]);
+    fetch('http://localhost:8000/blogs')
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          console.log('data', data);
+          setBlogs(data);
+        });
+  }, []);
 
-  const handleDelete = (id) => {
-    const newBlogs = blogs.filter((blog) => blog.id !== id)
-    setBlogs(newBlogs)
-  };
+  // const handleDelete = (id) => {
+  //   const newBlogs = blogs.filter((blog) => blog.id !== id)
+  //   setBlogs(newBlogs)
+  // };
 
   // useState: Reactive state
   // const [name, setName] = useState('Mahreen');
@@ -39,11 +40,7 @@ const Home = () => {
 
   return (
       <div className="home">
-        <BlogList hasBlogs={blogs} title="All blogs"
-                  handleDelete={handleDelete}/>
-        <BlogList hasBlogs={blogs.filter((blog) => blog.author === 'Imran')}
-                  title="Imran's blogs"
-                  handleDelete={handleDelete}/>
+        {blogs &&  <BlogList hasBlogs={blogs} title="All blogs"/>}
         <button onClick={() => setName('Musa')}>Change name</button>
         <p>{ name }</p>
         {/*<p>{name} is {age} year(s) of age</p>*/}
