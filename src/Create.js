@@ -1,15 +1,34 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const Create = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [author, setAuthor] = useState('Imran');
+  const [isPending, setIsPending] = useState(false);
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     // Prevent refresh on submit
     e.preventDefault();
     const blog = { title, body, author };
-    console.log(blog);
+
+    setIsPending(true);
+
+    setTimeout(() => {
+      fetch('http://localhost:8000/blogs', {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(blog)
+      }).then(() => {
+        console.log('New blog posted');
+        setIsPending(false);
+        // Route back one step
+        // history.go(-1)
+        // Route back home
+        history.push('/');
+      })
+    }, 1000)
   }
 
   return (
@@ -34,11 +53,8 @@ const Create = () => {
             <option value="Imran">Imran</option>
             <option value="Musa">Musa</option>
           </select>
-          <button>Add Blog</button>
-          {/* Test saved state */}
-          <p>{title}</p>
-          <p>{body}</p>
-          <p>{author}</p>
+          {!isPending && <button>Add Blog</button>}
+          {isPending && <button disabled>Adding Blog</button>}
         </form>
       </div>
   );
